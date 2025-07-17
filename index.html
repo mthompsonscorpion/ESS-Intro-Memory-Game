@@ -56,11 +56,12 @@
     .card-front {
       background: #1e90ff;
       color: white;
+      z-index: 2;
     }
     .card-back {
       background: white;
       transform: rotateY(180deg);
-      padding: 0;
+      z-index: 1;
     }
     .card-back img {
       width: 100%;
@@ -80,10 +81,12 @@
   </main>
 
   <script>
+    // Images for the 8 unique cards
     const symbols = [
       'img1.jpg', 'img2.jpg', 'img3.jpg', 'img4.jpg',
       'img5.jpg', 'img6.jpg', 'img7.jpg', 'img8.jpg'
     ];
+    // Duplicate to make pairs
     const cards = [...symbols, ...symbols];
 
     function shuffle(array) {
@@ -98,7 +101,7 @@
     let flippedCards = [];
     let lockBoard = false;
 
-    function createCard(imageName, index) {
+    function createCard(imageName) {
       const card = document.createElement('div');
       card.classList.add('card');
 
@@ -107,12 +110,13 @@
 
       const front = document.createElement('div');
       front.classList.add('card-front');
-      front.textContent = index + 1;
+      // Optionally, you can leave front empty or use a pattern or logo
+      front.textContent = ""; // No number, just a blank blue card
 
       const back = document.createElement('div');
       back.classList.add('card-back');
       const img = document.createElement('img');
-      img.src = `images/${imageName}`;
+      img.src = `./images/${imageName}`;
       img.alt = "";
       back.appendChild(img);
 
@@ -134,11 +138,15 @@
           const firstImg = first.getAttribute('data-image');
           const secondImg = second.getAttribute('data-image');
 
+          // Show images for both cards (already done by flipping)
+          // After delay, check for match or flip back
           if (firstImg === secondImg) {
-            first.classList.add('matched');
-            second.classList.add('matched');
-            flippedCards = [];
-            lockBoard = false;
+            setTimeout(() => {
+              first.classList.add('matched');
+              second.classList.add('matched');
+              flippedCards = [];
+              lockBoard = false;
+            }, 700);
           } else {
             setTimeout(() => {
               first.classList.remove('flipped');
@@ -155,8 +163,8 @@
 
     function setupGame() {
       const shuffled = shuffle(cards);
-      shuffled.forEach((image, index) => {
-        const card = createCard(image, index);
+      shuffled.forEach((image) => {
+        const card = createCard(image);
         gameBoard.appendChild(card);
       });
     }
