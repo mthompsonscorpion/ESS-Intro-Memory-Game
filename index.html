@@ -69,7 +69,6 @@
     }
     .card.matched {
       pointer-events: none;
-      background: #32cd32;
     }
   </style>
 </head>
@@ -112,12 +111,14 @@
       back.classList.add('card-back');
       const img = document.createElement('img');
       img.src = `images/${imageName}`;
-      img.alt = `Card image ${imageName}`;
+      img.alt = "Card image";
       back.appendChild(img);
 
       inner.appendChild(front);
       inner.appendChild(back);
       card.appendChild(inner);
+
+      card.setAttribute('data-image', imageName);
 
       card.addEventListener('click', () => {
         if (lockBoard || card.classList.contains('flipped') || card.classList.contains('matched')) return;
@@ -128,8 +129,8 @@
         if (flippedCards.length === 2) {
           lockBoard = true;
           const [first, second] = flippedCards;
-          const firstImg = first.querySelector('.card-back img').src;
-          const secondImg = second.querySelector('.card-back img').src;
+          const firstImg = first.getAttribute('data-image');
+          const secondImg = second.getAttribute('data-image');
 
           if (firstImg === secondImg) {
             first.classList.add('matched');
